@@ -1,0 +1,66 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:UnityCleaner.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
+        x:Class="UnityCleaner.Views.SettingsView"
+        x:DataType="vm:SettingsViewModel"
+        Title="Settings"
+        Width="400" Height="450"
+        WindowStartupLocation="CenterOwner">
+
+    <Design.DataContext>
+        <vm:SettingsViewModel/>
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,*,Auto" Margin="20">
+        <TextBlock Grid.Row="0" Text="Settings" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="20">
+                <StackPanel>
+                    <TextBlock Text="Theme" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <CheckBox Content="Use Dark Theme" IsChecked="{Binding UseDarkTheme}"/>
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Text="Cleaning Options" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <CheckBox Content="Move to Recycle Bin instead of permanent deletion" IsChecked="{Binding UseRecycleBin}"/>
+                    <TextBlock Text="When enabled, cleaned files will be moved to the recycle bin (or equivalent) instead of being permanently deleted."
+                               TextWrapping="Wrap" Margin="20,5,0,0" Opacity="0.7" FontSize="12"/>
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Text="Clean Patterns" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <TextBlock Text="Specify folders to clean from Unity projects" Margin="0,0,0,10" TextWrapping="Wrap"/>
+
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,10">
+                        <TextBox Grid.Column="0" Text="{Binding NewPatternText}" Watermark="Add new pattern..."/>
+                        <Button Grid.Column="1" Content="Add" Command="{Binding AddCleanPatternCommand}" Margin="5,0,0,0"/>
+                    </Grid>
+
+                    <ItemsControl ItemsSource="{Binding CleanPatterns}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,5">
+                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsEnabled}"
+                                              Click="TogglePatternEnabled_Click"
+                                              CommandParameter="{Binding}"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding Pattern}" VerticalAlignment="Center" Margin="5,0"/>
+                                    <Button Grid.Column="2" Content="✕"
+                                            Click="RemoveCleanPattern_Click"
+                                            CommandParameter="{Binding}"
+                                            IsEnabled="{Binding !IsDefault}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Button Grid.Row="2" Content="Close" HorizontalAlignment="Right" Margin="0,10,0,0"
+                Click="CloseButton_Click"/>
+    </Grid>
+</Window>

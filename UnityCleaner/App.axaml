@@ -1,0 +1,52 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="UnityCleaner.App"
+             xmlns:local="using:UnityCleaner"
+             RequestedThemeVariant="Dark">
+             <!-- Theme will be set programmatically based on user settings -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Dark">
+                    <Color x:Key="SystemAccentColor">#0078D7</Color>
+                    <Color x:Key="SystemAltHighColor">#2D2D30</Color>
+                    <Color x:Key="SystemAltLowColor">#3E3E42</Color>
+                    <Color x:Key="SystemAltMediumColor">#3E3E42</Color>
+                    <Color x:Key="SystemAltMediumHighColor">#505050</Color>
+                    <Color x:Key="SystemAltMediumLowColor">#3E3E42</Color>
+                    <Color x:Key="SystemBaseHighColor">#FFFFFF</Color>
+                    <Color x:Key="SystemBaseLowColor">#252526</Color>
+                    <Color x:Key="SystemBaseMediumColor">#808080</Color>
+                    <Color x:Key="SystemBaseMediumHighColor">#DADADA</Color>
+                    <Color x:Key="SystemBaseMediumLowColor">#606060</Color>
+                    <Color x:Key="SystemChromeAltLowColor">#1B1B1C</Color>
+                    <Color x:Key="SystemChromeBlackHighColor">#1B1B1C</Color>
+                    <Color x:Key="SystemChromeBlackLowColor">#2D2D30</Color>
+                    <Color x:Key="SystemChromeBlackMediumLowColor">#2D2D30</Color>
+                    <Color x:Key="SystemChromeBlackMediumColor">#2D2D30</Color>
+                    <Color x:Key="SystemChromeDisabledHighColor">#333333</Color>
+                    <Color x:Key="SystemChromeDisabledLowColor">#252526</Color>
+                    <Color x:Key="SystemChromeHighColor">#1B1B1C</Color>
+                    <Color x:Key="SystemChromeLowColor">#1B1B1C</Color>
+                    <Color x:Key="SystemChromeMediumColor">#2D2D30</Color>
+                    <Color x:Key="SystemChromeMediumLowColor">#2D2D30</Color>
+                    <Color x:Key="SystemChromeWhiteColor">#FFFFFF</Color>
+                    <Color x:Key="SystemListLowColor">#1B1B1C</Color>
+                    <Color x:Key="SystemListMediumColor">#2D2D30</Color>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Light">
+                    <Color x:Key="SystemAccentColor">#0078D7</Color>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

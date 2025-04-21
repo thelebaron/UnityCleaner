@@ -1,0 +1,169 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:UnityCleaner.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="using:UnityCleaner.Models"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+        x:Class="UnityCleaner.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="UnityCleaner"
+        MinWidth="800" MinHeight="600">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Window.Styles>
+        <!-- Tag Style -->
+        <Style Selector="Border.tag">
+            <Setter Property="Background" Value="#2D2D30"/>
+            <Setter Property="BorderBrush" Value="#3E3E42"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="4"/>
+        </Style>
+        <Style Selector="Border.tag:pointerover">
+            <Setter Property="Background" Value="#3E3E42"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <!-- File Item Style -->
+        <Style Selector="Border.fileItem">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        <Style Selector="Border.fileItem:pointerover">
+            <Setter Property="Background" Value="#3E3E42"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Top Toolbar -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="10">
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                <TextBox Width="300" Text="{Binding CurrentDirectory}" Watermark="Directory path..." />
+                <Button Content="Browse" Command="{Binding BrowseDirectoryCommand}" IsEnabled="{Binding !IsScanning}" />
+                <Button Content="Scan" Command="{Binding ScanDirectoryCommand}" CommandParameter="{Binding CurrentDirectory}"
+                        IsEnabled="{Binding !IsScanning}" />
+                <Button Content="Clean" Command="{Binding CleanProjectsCommand}"
+                        IsEnabled="{Binding !IsScanning}" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                <Button Content="🔄" ToolTip.Tip="Toggle Theme" Command="{Binding ToggleThemeCommand}" />
+                <Button Content="⚙️" ToolTip.Tip="Settings" Click="SettingsButton_Click" />
+            </StackPanel>
+        </Grid>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto,250" Margin="10,0">
+            <!-- Projects Panel -->
+            <DockPanel Grid.Column="0">
+                <TextBlock DockPanel.Dock="Top" Text="Unity Projects" FontWeight="Bold" Margin="0,0,0,10" />
+
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding Projects}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Classes="tag">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TextBlock Grid.Column="0" Text="{Binding ProjectName}" VerticalAlignment="Center" />
+                                        <Button Grid.Column="1" Content="▼" Margin="5,0,0,0" Padding="3,0"
+                                                Click="ToggleProjectExpansion_Click"
+                                                CommandParameter="{Binding}" />
+                                    </Grid>
+
+                                    <Border.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Show in Explorer"
+                                                      Click="OpenInExplorer_Click"
+                                                      CommandParameter="{Binding ProjectPath}" />
+                                            <MenuItem Header="Delete Project" />
+                                        </ContextMenu>
+                                    </Border.ContextMenu>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
+
+            <!-- Splitter -->
+            <GridSplitter Grid.Column="1" Width="5" Background="Transparent" />
+
+            <!-- Details Panel -->
+            <DockPanel Grid.Column="2">
+                <TextBlock DockPanel.Dock="Top" Text="Project Details" FontWeight="Bold" Margin="0,0,0,10" />
+
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding Projects}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Expander IsExpanded="{Binding IsExpanded}" Margin="0,0,0,5">
+                                    <Expander.Header>
+                                        <TextBlock Text="{Binding ProjectName}" />
+                                    </Expander.Header>
+
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding ProjectPath}" Margin="0,0,0,5" TextWrapping="Wrap" />
+
+                                        <ItemsControl ItemsSource="{Binding FileStructure}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Classes="fileItem">
+                                                        <StackPanel>
+                                                            <Grid ColumnDefinitions="Auto,*">
+                                                                <TextBlock Grid.Column="0" Text="📁" Margin="0,0,5,0" IsVisible="{Binding IsDirectory}" />
+                                                                <TextBlock Grid.Column="0" Text="📄" Margin="0,0,5,0" IsVisible="{Binding !IsDirectory}" />
+                                                                <TextBlock Grid.Column="1" Text="{Binding Name}" />
+                                                            </Grid>
+
+                                                            <ItemsControl ItemsSource="{Binding Children}" Margin="20,0,0,0" IsVisible="{Binding IsExpanded}">
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <Border Classes="fileItem">
+                                                                            <Grid ColumnDefinitions="Auto,*">
+                                                                                <TextBlock Grid.Column="0" Text="📁" Margin="0,0,5,0" IsVisible="{Binding IsDirectory}" />
+                                                                                <TextBlock Grid.Column="0" Text="📄" Margin="0,0,5,0" IsVisible="{Binding !IsDirectory}" />
+                                                                                <TextBlock Grid.Column="1" Text="{Binding Name}" />
+                                                                            </Grid>
+                                                                        </Border>
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+                                                            </ItemsControl>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Expander>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
+        </Grid>
+
+        <!-- Status Bar -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Background="#2D2D30" Margin="0,5,0,0">
+            <TextBlock Grid.Column="0" Text="{Binding StatusMessage}" VerticalAlignment="Center" />
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                <ProgressBar IsIndeterminate="True" Width="100" IsVisible="{Binding IsScanning}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
