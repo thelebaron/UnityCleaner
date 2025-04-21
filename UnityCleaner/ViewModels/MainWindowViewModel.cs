@@ -168,6 +168,12 @@ namespace UnityCleaner.ViewModels
         }
 
         [RelayCommand]
+        private void ToggleProjectSelection(UnityProject project)
+        {
+            project.IsSelectedForCleaning = !project.IsSelectedForCleaning;
+        }
+
+        [RelayCommand]
         private void OpenInExplorer(string path)
         {
             try

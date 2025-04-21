@@ -1,23 +1,74 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace UnityCleaner.Models
 {
-    public class UnityProject
+    public class UnityProject : INotifyPropertyChanged
     {
+        private bool _isExpanded;
+        private bool _isSelectedForCleaning;
+        private List<FileSystemItem> _fileStructure;
+
         public string ProjectPath { get; }
         public string ProjectName { get; }
-        public bool IsExpanded { get; set; }
-        public List<FileSystemItem> FileStructure { get; private set; }
+
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set
+            {
+                if (_isExpanded != value)
+                {
+                    _isExpanded = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool IsSelectedForCleaning
+        {
+            get => _isSelectedForCleaning;
+            set
+            {
+                if (_isSelectedForCleaning != value)
+                {
+                    _isSelectedForCleaning = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public List<FileSystemItem> FileStructure
+        {
+            get => _fileStructure;
+            private set
+            {
+                if (_fileStructure != value)
+                {
+                    _fileStructure = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public UnityProject(string projectPath)
         {
             ProjectPath = projectPath;
             ProjectName = Path.GetFileName(projectPath);
-            IsExpanded = false;
-            FileStructure = new List<FileSystemItem>();
+            _isExpanded = false;
+            _isSelectedForCleaning = true; // Default to selected for cleaning
+            _fileStructure = new List<FileSystemItem>();
         }
 
         public void LoadFileStructure()
@@ -199,13 +250,49 @@ namespace UnityCleaner.Models
         }
     }
 
-    public class FileSystemItem
+
+
+    public class FileSystemItem : INotifyPropertyChanged
     {
+        private bool _isExpanded;
+        private List<FileSystemItem> _children = [];
+
         public required string Name { get; set; }
         public required string Path { get; set; }
         public bool IsDirectory { get; set; }
         public int Level { get; set; }
-        public bool IsExpanded { get; set; }
-        public List<FileSystemItem> Children { get; set; } = new List<FileSystemItem>();
+
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set
+            {
+                if (_isExpanded != value)
+                {
+                    _isExpanded = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public List<FileSystemItem> Children
+        {
+            get => _children;
+            set
+            {
+                if (_children != value)
+                {
+                    _children = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

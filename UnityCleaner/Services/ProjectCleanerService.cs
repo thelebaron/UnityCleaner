@@ -14,7 +14,7 @@ namespace UnityCleaner.Services
 
             await Task.Run(() =>
             {
-                foreach (var project in projects)
+                foreach (var project in projects.Where(p => p.IsSelectedForCleaning))
                 {
                     project.Clean(enabledPatterns, useRecycleBin);
                 }
