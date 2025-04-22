@@ -107,23 +107,23 @@
 
                 <!-- Info Bubble - Shown when no projects are listed -->
                 <Border Background="{DynamicResource PanelBackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}"
-                        BorderThickness="1" CornerRadius="8" Padding="24" Margin="0,0,0,16"
+                        BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,16"
                         IsVisible="{Binding !Projects.Count}">
-                    <StackPanel Spacing="16">
-                        <TextBlock Text="Unity Project Cleaner" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" />
-                        <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextBrush}">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Unity Project Cleaner" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" />
+                        <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextBrush}" FontSize="13">
                             This tool removes Unity's Library and Logs folders, and can be configured to remove additional folders too. Clicking a folder can also exclude it from cleaning.
                         </TextBlock>
-                        <Border Background="#3C3F41" BorderBrush="#FF5555" BorderThickness="1" CornerRadius="4" Padding="16">
-                            <StackPanel Spacing="8">
-                                <TextBlock Text="⚠️ WARNING" FontWeight="Bold" Foreground="#FF5555" HorizontalAlignment="Center" />
-                                <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextBrush}">
+                        <Border Background="#3C3F41" BorderBrush="#FF5555" BorderThickness="1" CornerRadius="4" Padding="12">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="⚠️ WARNING" FontWeight="Bold" Foreground="#FF5555" HorizontalAlignment="Center" FontSize="13" />
+                                <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextBrush}" FontSize="12">
                                     Warning! This really deletes stuff! Make sure your projects are using source control or backups!
                                 </TextBlock>
                             </StackPanel>
                         </Border>
-                        <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12">
-                            To get started, select a directory containing Unity projects and click "Scan".
+                        <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="11">
+                            To get started, select a directory containing Unity projects and click "Scan". Directories without Library folders wont be listed.
                         </TextBlock>
                     </StackPanel>
                 </Border>
