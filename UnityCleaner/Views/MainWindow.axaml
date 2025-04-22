@@ -118,7 +118,7 @@
                             <StackPanel Spacing="6">
                                 <TextBlock Text="⚠️ WARNING" FontWeight="Bold" Foreground="#FFD700" HorizontalAlignment="Center" FontSize="13" />
                                 <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextBrush}" FontSize="12">
-                                    Warning! This really deletes stuff! Make sure your projects are using source control or backups!
+                                    Warning! This really deletes stuff! Make sure your projects are using source control or backups! Also its slow, like really slow. ¯\_(ツ)_/¯
                                 </TextBlock>
                             </StackPanel>
                         </Border>
