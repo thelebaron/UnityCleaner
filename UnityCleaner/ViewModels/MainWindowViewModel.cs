@@ -1,4 +1,4 @@
-﻿﻿﻿﻿using System;
+﻿﻿﻿﻿﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -269,14 +269,7 @@ namespace UnityCleaner.ViewModels
             _settingsService.UpdateCleanPattern(pattern);
         }
 
-        [RelayCommand]
-        private void ToggleTheme()
-        {
-            var useDarkTheme = _settingsService.GetUseDarkTheme();
-            _settingsService.SetUseDarkTheme(!useDarkTheme);
-
-            // Theme change will be handled by App.axaml.cs
-        }
+        // Theme toggle removed
 
         private Window? GetTopLevel()
         {

@@ -12,8 +12,7 @@ namespace UnityCleaner.ViewModels
     {
         private readonly SettingsService _settingsService;
 
-        [ObservableProperty]
-        private bool _useDarkTheme;
+        // Theme setting removed
 
         [ObservableProperty]
         private bool _useRecycleBin;
@@ -26,7 +25,7 @@ namespace UnityCleaner.ViewModels
         public SettingsViewModel(SettingsService settingsService)
         {
             _settingsService = settingsService;
-            UseDarkTheme = _settingsService.GetUseDarkTheme();
+            // Theme setting removed
             UseRecycleBin = _settingsService.GetUseRecycleBin();
             NewPatternText = string.Empty;
 
@@ -73,10 +72,7 @@ namespace UnityCleaner.ViewModels
             _settingsService.UpdateCleanPattern(pattern);
         }
 
-        partial void OnUseDarkThemeChanged(bool value)
-        {
-            _settingsService.SetUseDarkTheme(value);
-        }
+        // Theme setting removed
 
         partial void OnUseRecycleBinChanged(bool value)
         {

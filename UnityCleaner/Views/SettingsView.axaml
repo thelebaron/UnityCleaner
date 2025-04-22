@@ -3,11 +3,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:UnityCleaner.ViewModels"
-        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="500"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
         x:Class="UnityCleaner.Views.SettingsView"
         x:DataType="vm:SettingsViewModel"
         Title="Settings"
-        Width="450" Height="500"
+        Width="400" Height="450"
         WindowStartupLocation="CenterOwner"
         Background="{DynamicResource WindowBackgroundBrush}"
         Foreground="{DynamicResource TextBrush}">
@@ -26,14 +26,6 @@
         <!-- Content -->
         <ScrollViewer Grid.Row="1" Padding="24,20">
             <StackPanel Spacing="24">
-                <!-- Theme Section -->
-                <Border Background="{DynamicResource PanelBackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}"
-                        BorderThickness="1" CornerRadius="3" Padding="16">
-                    <StackPanel>
-                        <TextBlock Text="Theme" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,12" Foreground="{DynamicResource TextBrush}"/>
-                        <CheckBox Content="Use Dark Theme" IsChecked="{Binding UseDarkTheme}" Margin="0,4,0,0"/>
-                    </StackPanel>
-                </Border>
 
                 <!-- Cleaning Options Section -->
                 <Border Background="{DynamicResource PanelBackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}"
