@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿﻿﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -33,6 +33,15 @@ namespace UnityCleaner.ViewModels
         [ObservableProperty]
         private string _statusMessage;
 
+        [ObservableProperty]
+        private int _cleaningProgress;
+
+        [ObservableProperty]
+        private int _totalProjectsToClean;
+
+        [ObservableProperty]
+        private string _currentProjectCleaning;
+
         public ObservableCollection<UnityProject> Projects { get; } = new();
         public ObservableCollection<string> RecentDirectories { get; } = new();
         public ObservableCollection<CleanPattern> CleanPatterns { get; } = new();
@@ -45,8 +54,31 @@ namespace UnityCleaner.ViewModels
 
             CurrentDirectory = string.Empty;
             StatusMessage = "Ready to scan for Unity projects";
+            CurrentProjectCleaning = string.Empty;
+            CleaningProgress = 0;
+            TotalProjectsToClean = 0;
+
+            // Subscribe to progress updates
+            _cleanerService.ProgressUpdated += OnCleaningProgressUpdated;
 
             LoadSettings();
+        }
+
+        private void OnCleaningProgressUpdated(int projectsCompleted, int totalProjects, string currentProject)
+        {
+            CleaningProgress = projectsCompleted;
+            TotalProjectsToClean = totalProjects;
+            CurrentProjectCleaning = currentProject;
+
+            // Update status message
+            if (projectsCompleted < totalProjects)
+            {
+                StatusMessage = $"Cleaning {projectsCompleted} of {totalProjects} projects: {currentProject}";
+            }
+            else
+            {
+                StatusMessage = $"Cleaning completed successfully: {totalProjects} projects processed";
+            }
         }
 
         private void LoadSettings()
@@ -138,13 +170,19 @@ namespace UnityCleaner.ViewModels
         {
             try
             {
+                // Reset progress tracking
+                CleaningProgress = 0;
+                TotalProjectsToClean = Projects.Count(p => p.IsSelectedForCleaning);
+                CurrentProjectCleaning = string.Empty;
+
+                // Start cleaning
                 IsCleaning = true;
-                StatusMessage = "Cleaning Unity projects...";
+                StatusMessage = "Preparing to clean Unity projects...";
 
                 bool useRecycleBin = _settingsService.GetUseRecycleBin();
                 await _cleanerService.CleanProjectsAsync(Projects, CleanPatterns, useRecycleBin);
 
-                StatusMessage = "Cleaning completed successfully";
+                // Final status is set by the progress update handler
             }
             catch (Exception ex)
             {

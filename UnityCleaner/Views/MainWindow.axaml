@@ -187,13 +187,25 @@
         <!-- Status Bar -->
         <Border Grid.Row="2" Background="{DynamicResource PanelBackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}"
                 BorderThickness="0,1,0,0" Padding="16,8">
-            <Grid ColumnDefinitions="*,Auto">
-                <TextBlock Grid.Column="0" Text="{Binding StatusMessage}" VerticalAlignment="Center" Foreground="{DynamicResource TextBrush}" />
+            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                <!-- Status Message -->
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding StatusMessage}" VerticalAlignment="Center"
+                           Foreground="{DynamicResource TextBrush}" Margin="0,0,0,4" />
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12">
-                    <ProgressBar IsIndeterminate="True" Width="120" Height="4" IsVisible="{Binding IsScanning}"
+                <!-- Scanning Progress -->
+                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="12" IsVisible="{Binding IsScanning}">
+                    <ProgressBar IsIndeterminate="True" Width="120" Height="4"
                                  Foreground="{DynamicResource AccentBrush}" />
                 </StackPanel>
+
+                <!-- Cleaning Progress -->
+                <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" IsVisible="{Binding IsCleaning}"
+                      ColumnDefinitions="Auto,*" Margin="0,4,0,0">
+                    <TextBlock Grid.Column="0" Text="{Binding CurrentProjectCleaning}" Foreground="{DynamicResource SecondaryTextBrush}"
+                               FontSize="12" Margin="0,0,8,0" VerticalAlignment="Center" />
+                    <ProgressBar Grid.Column="1" Minimum="0" Maximum="{Binding TotalProjectsToClean}" Value="{Binding CleaningProgress}"
+                                 Height="6" Foreground="{DynamicResource AccentBrush}" />
+                </Grid>
             </Grid>
         </Border>
     </Grid>
