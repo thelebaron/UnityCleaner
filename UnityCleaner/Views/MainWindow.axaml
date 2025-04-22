@@ -114,9 +114,9 @@
                         <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextBrush}" FontSize="13">
                             This tool removes Unity's Library and Logs folders, and can be configured to remove additional folders too. Clicking a folder can also exclude it from cleaning.
                         </TextBlock>
-                        <Border Background="#3C3F41" BorderBrush="#FF5555" BorderThickness="1" CornerRadius="4" Padding="12">
+                        <Border Background="#3C3F41" BorderBrush="#FFA500" BorderThickness="2" CornerRadius="4" Padding="12" Margin="2">
                             <StackPanel Spacing="6">
-                                <TextBlock Text="⚠️ WARNING" FontWeight="Bold" Foreground="#FF5555" HorizontalAlignment="Center" FontSize="13" />
+                                <TextBlock Text="⚠️ WARNING" FontWeight="Bold" Foreground="#FFD700" HorizontalAlignment="Center" FontSize="13" />
                                 <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextBrush}" FontSize="12">
                                     Warning! This really deletes stuff! Make sure your projects are using source control or backups!
                                 </TextBlock>
