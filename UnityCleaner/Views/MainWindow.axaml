@@ -7,7 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="500"
         x:Class="UnityCleaner.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/broomicon.ico"
         Title="UnityCleaner"
         Width="700" Height="500"
         MinWidth="650" MinHeight="450"
