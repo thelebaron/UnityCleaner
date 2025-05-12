@@ -104,18 +104,19 @@ namespace UnityCleaner.Services
 
         public void AddRecentDirectory(string directory)
         {
-            if (!_settings.RecentDirectories.Contains(directory))
+            // Remove the directory if it already exists (to reinsert it at the top)
+            _settings.RecentDirectories.Remove(directory);
+
+            // Add the directory at the top of the list
+            _settings.RecentDirectories.Insert(0, directory);
+
+            // Keep only the last 10 directories
+            if (_settings.RecentDirectories.Count > 10)
             {
-                _settings.RecentDirectories.Insert(0, directory);
-
-                // Keep only the last 10 directories
-                if (_settings.RecentDirectories.Count > 10)
-                {
-                    _settings.RecentDirectories = _settings.RecentDirectories.Take(10).ToList();
-                }
-
-                SaveSettingsAsync().ConfigureAwait(false);
+                _settings.RecentDirectories = _settings.RecentDirectories.Take(10).ToList();
             }
+
+            SaveSettingsAsync().ConfigureAwait(false);
         }
 
         public List<CleanPattern> GetCleanPatterns()
@@ -174,6 +175,11 @@ namespace UnityCleaner.Services
         {
             _settings.UseRecycleBin = useRecycleBin;
             SaveSettingsAsync().ConfigureAwait(false);
+        }
+
+        public string GetLastUsedDirectory()
+        {
+            return _settings.RecentDirectories.Count > 0 ? _settings.RecentDirectories[0] : string.Empty;
         }
     }
 

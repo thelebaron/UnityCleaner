@@ -21,8 +21,20 @@ namespace UnityCleaner.ViewModels
         private readonly ProjectCleanerService _cleanerService;
         private readonly SettingsService _settingsService;
 
-        [ObservableProperty]
         private string _currentDirectory;
+
+        public string CurrentDirectory
+        {
+            get => _currentDirectory;
+            set
+            {
+                if (SetProperty(ref _currentDirectory, value) && !string.IsNullOrEmpty(value) && Directory.Exists(value))
+                {
+                    // Save the directory whenever it changes to a valid directory
+                    _settingsService.AddRecentDirectory(value);
+                }
+            }
+        }
 
         [ObservableProperty]
         private bool _isScanning;
@@ -52,7 +64,6 @@ namespace UnityCleaner.ViewModels
             _cleanerService = new ProjectCleanerService();
             _settingsService = new SettingsService();
 
-            CurrentDirectory = string.Empty;
             StatusMessage = "Ready to scan for Unity projects";
             CurrentProjectCleaning = string.Empty;
             CleaningProgress = 0;
@@ -95,6 +106,16 @@ namespace UnityCleaner.ViewModels
             foreach (var pattern in _settingsService.GetCleanPatterns())
             {
                 CleanPatterns.Add(pattern);
+            }
+
+            // Load last used directory
+            CurrentDirectory = _settingsService.GetLastUsedDirectory();
+
+            // Automatically scan the last used directory if it exists
+            if (!string.IsNullOrEmpty(CurrentDirectory) && Directory.Exists(CurrentDirectory))
+            {
+                // Use Task.Run to avoid blocking the UI thread during initialization
+                Task.Run(async () => await ScanDirectoryAsync(CurrentDirectory));
             }
         }
 
@@ -146,7 +167,7 @@ namespace UnityCleaner.ViewModels
                     Projects.Add(project);
                 }
 
-                _settingsService.AddRecentDirectory(directory);
+                // Refresh the recent directories list
                 RecentDirectories.Clear();
                 foreach (var recentDir in _settingsService.GetRecentDirectories())
                 {
